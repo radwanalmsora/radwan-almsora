@@ -2,7 +2,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>DevTools Pro</title>
+<title>DevTools Pro v1.1</title>
+
 <style>
 body{
   font-family: Arial;
@@ -11,37 +12,54 @@ body{
   text-align:center;
   padding:20px;
 }
+
 .box{
   background:#1c1c1c;
   padding:20px;
   border-radius:12px;
-  max-width:500px;
+  max-width:600px;
   margin:auto;
 }
-input,button{
+
+input,button,textarea{
   padding:10px;
   margin:5px;
+  width:90%;
+  border-radius:6px;
+  border:none;
 }
-button{cursor:pointer;}
+
+button{cursor:pointer;width:auto;}
+textarea{height:120px;}
 </style>
 </head>
 
 <body>
 
-<h1>🔥 DevTools Pro</h1>
+<h1>🔥 DevTools Pro v1.1</h1>
 
 <div class="box">
+
+<h3>Base64</h3>
 <input id="text" placeholder="Enter text">
 <br>
+<button onclick="b64e()">Encode</button>
+<button onclick="b64d()">Decode</button>
 
-<button onclick="b64e()">Base64 Encode</button>
-<button onclick="b64d()">Base64 Decode</button>
-<button onclick="hash()">SHA-256</button>
+<h3>JSON Formatter</h3>
+<textarea id="json"></textarea>
+<br>
+<button onclick="formatJSON()">Format</button>
+
+<h3>Password Generator</h3>
+<button onclick="genPass()">Generate Password</button>
 
 <p id="out"></p>
+
 </div>
 
 <script>
+
 function b64e(){
   let t=document.getElementById("text").value;
   document.getElementById("out").innerText=btoa(t);
@@ -52,14 +70,25 @@ function b64d(){
   document.getElementById("out").innerText=atob(t);
 }
 
-async function hash(){
-  let t=document.getElementById("text").value;
-  let enc=new TextEncoder().encode(t);
-  let buf=await crypto.subtle.digest("SHA-256",enc);
-  let arr=[...new Uint8Array(buf)];
-  let hex=arr.map(b=>b.toString(16).padStart(2,'0')).join('');
-  document.getElementById("out").innerText=hex;
+function formatJSON(){
+  try{
+    let obj=JSON.parse(document.getElementById("json").value);
+    document.getElementById("out").innerText=
+    JSON.stringify(obj,null,2);
+  }catch(e){
+    document.getElementById("out").innerText="Invalid JSON";
+  }
 }
+
+function genPass(){
+  let chars="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$!";
+  let pass="";
+  for(let i=0;i<12;i++){
+    pass += chars[Math.floor(Math.random()*chars.length)];
+  }
+  document.getElementById("out").innerText=pass;
+}
+
 </script>
 
 </body>
