@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>DevTools Pro</title>
+<style>
+body{
+  font-family: Arial;
+  background:#0f0f0f;
+  color:white;
+  text-align:center;
+  padding:20px;
+}
+.box{
+  background:#1c1c1c;
+  padding:20px;
+  border-radius:12px;
+  max-width:500px;
+  margin:auto;
+}
+input,button{
+  padding:10px;
+  margin:5px;
+}
+button{cursor:pointer;}
+</style>
+</head>
+
+<body>
+
+<h1>🔥 DevTools Pro</h1>
+
+<div class="box">
+<input id="text" placeholder="Enter text">
+<br>
+
+<button onclick="b64e()">Base64 Encode</button>
+<button onclick="b64d()">Base64 Decode</button>
+<button onclick="hash()">SHA-256</button>
+
+<p id="out"></p>
+</div>
+
+<script>
+function b64e(){
+  let t=document.getElementById("text").value;
+  document.getElementById("out").innerText=btoa(t);
+}
+
+function b64d(){
+  let t=document.getElementById("text").value;
+  document.getElementById("out").innerText=atob(t);
+}
+
+async function hash(){
+  let t=document.getElementById("text").value;
+  let enc=new TextEncoder().encode(t);
+  let buf=await crypto.subtle.digest("SHA-256",enc);
+  let arr=[...new Uint8Array(buf)];
+  let hex=arr.map(b=>b.toString(16).padStart(2,'0')).join('');
+  document.getElementById("out").innerText=hex;
+}
+</script>
+
+</body>
+</html>
